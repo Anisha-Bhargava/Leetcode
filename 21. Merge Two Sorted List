@@ -1,0 +1,62 @@
+OPTIMAL SOLUTION (USING TWO POINTER)
+
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        ListNode* t1 = list1;
+        ListNode* t2 = list2;
+        ListNode* dummynode = new ListNode(-1);
+        ListNode* temp = dummynode;
+
+        while(t1 != NULL && t2 != NULL){
+            if(t1->val < t2->val){
+                temp->next = t1;
+                temp=t1;
+                t1=t1->next;
+            }
+            else{
+                temp->next = t2;
+                temp=t2;
+                t2=t2->next;
+            }
+        }
+        if(t1) temp->next=t1;
+        else temp->next=t2;
+
+        return dummynode->next;
+    }
+};
+
+BRUTE FORCE
+
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        vector<int> vec;
+        ListNode* t1 = list1;
+        ListNode* t2 = list2;
+
+        while (t1 != NULL) {
+            vec.push_back(t1->val);
+            t1 = t1->next;
+        }
+        while (t2 != NULL) {
+            vec.push_back(t2->val);
+            t2 = t2->next;
+        }
+
+        if (vec.empty()) return nullptr; // handle empty case
+
+        sort(vec.begin(), vec.end());
+        //for vector to list conversion
+        ListNode* head = new ListNode(vec[0]);
+        ListNode* prev = head;
+
+        for (int i = 1; i < vec.size(); i++) {
+            ListNode* temp = new ListNode(vec[i]);
+            prev->next = temp;
+            prev = temp;
+        }
+        return head;
+    }
+};
