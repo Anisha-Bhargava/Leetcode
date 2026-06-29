@@ -1,0 +1,50 @@
+OPTIMAL (BINARY SEARCH ON ANSWER)
+
+class Solution {
+public:
+    int sumbyD(vector<int>& nums, int div){
+        int n=nums.size();
+        int sum=0;
+        for(int i=0;i<n;i++){
+            sum += ceil((double)(nums[i])/(double)(div));
+        }
+        return sum;
+    }
+    int smallestDivisor(vector<int>& nums, int threshold) {
+        int maxi = *max_element(nums.begin(),nums.end());
+        int low=1;
+        int high = maxi;
+        int ans=-1;
+        while(low<=high){
+            int mid = low + (high-low)/2;
+            if(sumbyD(nums,mid)<=threshold){
+                ans=mid;
+                high=mid-1;
+            }
+            else low = mid+1;
+        }
+        return ans;  
+    }
+};
+
+
+
+BRUTE FORCE (CAUSE TLE)
+
+class Solution {
+public:
+    int smallestDivisor(vector<int>& nums, int threshold) {
+        int n=nums.size();
+        int maxi = *max_element(nums.begin(),nums.end());
+
+        for(int d=1;d<=maxi;d++){
+            int sum=0;
+            for(int i=0;i<n;i++){
+                sum += ceil((double)(nums[i])/(double)(d));
+            }
+            if(sum<=threshold) return d;
+        }
+        return -1;
+    }
+
+};
