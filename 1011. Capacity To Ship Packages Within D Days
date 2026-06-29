@@ -1,0 +1,61 @@
+OPTIMAL (BINARY SEARCH ON ANSWER)
+
+class Solution {
+public:
+    int Reqdays(vector<int>& weights, int capacity){
+        int days=1;
+        int currload=0;
+        for(int w: weights){
+            if(currload + w> capacity){
+                days++;
+                currload = w;
+            }
+            else currload += w;
+        }
+        return days;
+    }
+    int shipWithinDays(vector<int>& weights, int days) {
+        int low = *max_element(weights.begin(), weights.end());
+        int high = accumulate(weights.begin(), weights.end(),0);
+
+        while(low<=high){
+            int mid = low + (high-low)/2;
+            int noOfdays = Reqdays(weights,mid);
+            if(noOfdays<= days) high = mid-1;
+            else low = mid+1;
+        }
+        return low;
+    
+    }
+};
+
+
+
+
+BRUTE FORCE (CAUSE TLE)
+
+class Solution {
+public:
+    int Reqdays(vector<int>& weights, int capacity){
+        int days=1;
+        int currload=0;
+        for(int w: weights){
+            if(currload + w> capacity){
+                days++;
+                currload = w;
+            }
+            else currload += w;
+        }
+        return days;
+    }
+    int shipWithinDays(vector<int>& weights, int days) {
+        int a = *max_element(weights.begin(), weights.end());
+        int b = accumulate(weights.begin(), weights.end(),0);
+
+        for(int i=a;i<=b;i++){
+            int d = Reqdays(weights,i);
+            if(d<=days) return i;
+        }
+        return b;
+    }
+};
