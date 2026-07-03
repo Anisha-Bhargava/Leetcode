@@ -1,0 +1,27 @@
+OPTIMAL SOLUTION
+
+class Solution {
+public:
+    bool rotateString(string s, string goal) {
+        if(s.length() != goal.length()) return false;
+
+        string doubleS = s + s;
+        return doubleS.find(goal) != string::npos;
+    }
+};
+
+
+BRUTE FORCE (TC - O(N^2))
+
+class Solution {
+public:
+    bool rotateString(string s, string goal) {
+        if(s.length() != goal.length()) return false;
+
+        for(int i=0;i<s.length();i++){
+            string rotated = s.substr(i) + s.substr(0,i);
+            if (rotated == goal) return true;
+        }
+        return false;
+    }
+};
