@@ -1,0 +1,50 @@
+BRUTE FORCE (GENERATE ALL SUBSTRING AND THEN COUNT THE NUMBER OF VOWELS, TLE ERROR)
+
+class Solution {
+public:
+    bool isvowel(char ch){
+        return ch=='a' || ch=='e' || ch=='i' || ch=='o' || ch=='u';
+    }
+
+    int maxVowels(string s, int k) {
+        int n=s.size();
+        int ans=0;
+
+        for(int i=0;i<=n-k;i++){
+            int cnt=0;
+            for(int j=i;j<i+k;j++){
+                if(isvowel(s[j])) cnt++;
+            }
+            ans = max(ans,cnt);
+        }
+        return ans;    
+    }
+};
+
+BETTER -> CAN BE DONE BY USING PREFIX SUM BUT THE ISSUE IS SC WILL BECOME O(N) BECZ OF USING EXTRA ARRAY FOR PREFIX SUM
+
+OPTIMAL SOLUTION (TC = O(n))
+
+class Solution {
+public:
+    bool isvowel(char ch){
+        return ch=='a' || ch=='e' || ch=='i' || ch=='o' || ch=='u';
+    }
+
+    int maxVowels(string s, int k) {
+        int n=s.size();
+        int cnt=0;
+
+        for(int i=0;i<k;i++){
+            if(isvowel(s[i])) cnt++;
+        }
+
+        int ans = cnt;
+        for(int i=k;i<n;i++){
+            if(isvowel(s[i-k])) cnt--;
+            if(isvowel(s[i])) cnt++;
+            ans = max(ans,cnt);
+        }
+        return ans;    
+    }
+};
