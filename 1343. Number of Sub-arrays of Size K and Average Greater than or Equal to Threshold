@@ -1,0 +1,42 @@
+BRUTE FORCE - BY GENERATING ALL SUBARRAYS AND THEN CHECKING THE CONDITION (TLE OCCURS)
+
+class Solution {
+public:
+    int numOfSubarrays(vector<int>& arr, int k, int threshold) {
+        int n = arr.size();
+        int cnt=0;
+        for(int i=0;i<=n-k;i++){
+            int sum=0;
+            for(int j=i;j<i+k;j++){
+                sum=sum+arr[j];
+            }
+            if(sum >= threshold*k) cnt++;
+        }
+        return cnt;
+    }
+};
+
+
+OPTIMAL APPROACH - SLIDING WINDOW
+
+class Solution {
+public:
+    int numOfSubarrays(vector<int>& arr, int k, int threshold) {
+        int n = arr.size();
+        int cnt=0;
+        int sum=0;
+        for(int i=0;i<k;i++){
+            sum += arr[i];
+        }
+        
+        if(sum >= threshold*k) cnt++;
+
+        for(int i=k;i<n;i++){
+            sum -= arr[i-k];
+            sum += arr[i];
+
+            if(sum >= threshold*k) cnt++;
+        }
+        return cnt;
+    }
+};
