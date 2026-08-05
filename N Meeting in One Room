@@ -1,0 +1,43 @@
+class Meeting{
+public:
+    int start;
+    int end;
+    int pos;
+};
+
+
+class Solution {
+  public:
+    static bool comp(Meeting a, Meeting b){
+        return a.end < b.end;
+    }
+    
+    vector<int> maxMeetings(vector<int> &s, vector<int> &f) {
+        int n=s.size();
+        vector<Meeting> arr(n);
+        
+        for(int i=0;i<n;i++){
+            arr[i].start = s[i];
+            arr[i].end = f[i];
+            arr[i].pos = i+1;
+        }
+        
+        sort(arr.begin(), arr.end(), comp);
+        vector<int> ans;
+        
+        int cnt=1;
+        ans.push_back(arr[0].pos);
+        int lastend = arr[0].end;
+        
+        for(int i=1;i<n;i++){
+            if(arr[i].start > lastend){
+                cnt++;
+                ans.push_back(arr[i].pos);
+                lastend = arr[i].end;
+            }
+        }
+        
+        sort(ans.begin(), ans.end());
+        return ans;
+    }
+};
