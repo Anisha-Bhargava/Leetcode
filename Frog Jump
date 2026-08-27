@@ -1,0 +1,80 @@
+MEMOIZATION
+
+class Solution {
+  public:
+  
+    int solve(int i, vector<int>& height, vector<int>& dp){
+        if(i==0) return 0;
+        
+        if(dp[i] != -1) return dp[i];
+        
+        int onejump = solve(i-1,height,dp) + abs(height[i] - height[i-1]);
+            
+        int twojump = INT_MAX;
+        if(i>1){
+            twojump = solve(i-2,height,dp) + abs(height[i] - height[i-2]);
+        }
+            
+        return dp[i] = min(onejump, twojump);
+    }
+    
+    int minCost(vector<int>& height) {
+        int n= height.size();
+        vector<int> dp(n,-1);
+        return solve(n-1,height,dp);
+    }
+};
+
+
+TABULATION
+
+class Solution {
+  public:
+    int minCost(vector<int>& height) {
+        int n= height.size();
+        vector<int> dp(n,0);
+        
+        dp[0] = 0;
+        for(int i=1;i<n;i++){
+            int onejump = dp[i-1] + abs(height[i] - height[i-1]);
+            
+            int twojump = INT_MAX;
+            if(i>1){
+                twojump = dp[i-2] + abs(height[i] - height[i-2]);
+            }
+            
+            dp[i] = min(onejump, twojump);
+        }
+        return dp[n-1];
+    }
+    
+};
+
+
+SPACE OPTIMIZATION
+
+class Solution {
+  public:
+    int minCost(vector<int>& height) {
+        int n= height.size();
+        
+        int prev2=0;
+        int prev1=0;
+        
+        
+        for(int i=1;i<n;i++){
+            int onejump = prev1 + abs(height[i] - height[i-1]);
+            
+            int twojump = INT_MAX;
+            if(i>1){
+                twojump = prev2 + abs(height[i] - height[i-2]);
+            }
+            
+            int curr = min(onejump, twojump);
+            
+            prev2=prev1;
+            prev1=curr;
+        }
+        return prev1;
+    }
+};
