@@ -1,0 +1,86 @@
+Recurrsion
+
+class Solution {
+public:
+    int f(int i, vector<int>& heights, int k) {
+        if(i == 0)
+            return 0;
+
+        int minSteps = INT_MAX;
+
+        for(int j = i-1; j >= max(0, i-k); j--) {
+            int jump = f(j, heights, k) +
+                       abs(heights[i] - heights[j]);
+
+            minSteps = min(minSteps, jump);
+        }
+
+        return minSteps;
+    }
+
+    int frogJump(vector<int>& heights, int k) {
+        int n = heights.size();
+        return f(n-1, heights, k);
+    }
+};
+
+Memoization 
+
+class Solution {
+public:
+    int f(int i, vector<int>& heights, int k, vector<int>& dp) {
+        if(i == 0)
+            return 0;
+
+        if(dp[i] != -1)
+            return dp[i];
+
+        int minSteps = INT_MAX;
+
+        for(int j = i-1; j >= max(0, i-k); j--) {
+            int jump = f(j, heights, k, dp) +
+                       abs(heights[i] - heights[j]);
+
+            minSteps = min(minSteps, jump);
+        }
+
+        return dp[i] = minSteps;
+    }
+
+    int frogJump(vector<int>& heights, int k) {
+        int n = heights.size();
+
+        vector<int> dp(n, -1);
+
+        return f(n-1, heights, k, dp);
+    }
+};
+
+Tabulation 
+class Solution {
+public:
+    int frogJump(vector<int>& heights, int k) {
+        int n = heights.size();
+
+        vector<int> dp(n, 0);
+
+        dp[0] = 0;
+
+        for(int i = 1; i < n; i++) {
+
+            int minSteps = INT_MAX;
+
+            for(int j = i-1; j >= max(0, i-k); j--) {
+
+                int jump = dp[j] +
+                           abs(heights[i] - heights[j]);
+
+                minSteps = min(minSteps, jump);
+            }
+
+            dp[i] = minSteps;
+        }
+
+        return dp[n-1];
+    }
+};
