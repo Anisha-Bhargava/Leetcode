@@ -1,0 +1,116 @@
+RECURRSION
+
+class Solution {
+  public:
+    int f(int ind, int W, vector<int>& val, vector<int>& wt){
+        if(ind==0) return ((int)(W/wt[0]) * val[0]);
+        int notTake = 0 + f(ind-1, W, val, wt);
+        int take = 0;
+        if(wt[ind]<=W) take = val[ind] + f(ind, W-wt[ind], val, wt);
+        return max(take,notTake);
+    }
+    
+    int knapSack(vector<int>& val, vector<int>& wt, int capacity) {
+        int n=val.size();
+        return f(n-1, capacity, val, wt);
+    }
+};
+
+MEMOIATION
+
+class Solution {
+  public:
+    int f(int ind, int W, vector<int>& val, vector<int>& wt, vector<vector<int>> &dp){
+        if(ind==0) return ((int)(W/wt[0]) * val[0]);
+        if(dp[ind][W] != -1) return dp[ind][W];
+        int notTake = 0 + f(ind-1, W, val, wt, dp);
+        int take = 0;
+        if(wt[ind]<=W) take = val[ind] + f(ind, W-wt[ind], val, wt, dp);
+        return dp[ind][W] = max(take,notTake);
+    }
+    
+    int knapSack(vector<int>& val, vector<int>& wt, int capacity) {
+        int n=val.size();
+        vector<vector<int>> dp(n,vector<int> (capacity+1,-1));
+        return f(n-1, capacity, val, wt, dp);
+    }
+};
+
+TABULATION
+
+class Solution {
+  public:
+    int knapSack(vector<int>& val, vector<int>& wt, int capacity) {
+        int n=val.size();
+        vector<vector<int>> dp(n,vector<int> (capacity+1,0));
+        
+        //base case
+        for(int w=0;w<=capacity;w++){
+            dp[0][w] = ((int)(w/wt[0]) * val[0]);
+        }
+        
+        for(int ind=1;ind<n;ind++){
+            for(int w=0;w<=capacity;w++){
+                int notTake = 0 + dp[ind-1][w];
+                int take = 0;
+                if(wt[ind]<=w) take = val[ind] + dp[ind][w-wt[ind]];
+                dp[ind][w] = max(take,notTake);
+            }
+        }
+        
+        return dp[n-1][capacity];
+    }
+};
+
+SPACE OPTIMIZATION
+
+class Solution {
+  public:    
+    int knapSack(vector<int>& val, vector<int>& wt, int capacity) {
+        int n=val.size();
+        //vector<vector<int>> dp(n,vector<int> (capacity+1,0));
+        vector<int> prev(capacity+1,0), curr(capacity+1,0);
+        //base case
+        for(int w=0;w<=capacity;w++){
+            prev[w] = ((int)(w/wt[0]) * val[0]);
+        }
+        
+        for(int ind=1;ind<n;ind++){
+            for(int w=0;w<=capacity;w++){
+                int notTake = 0 + prev[w];
+                int take = 0;
+                if(wt[ind]<=w) take = val[ind] + curr[w-wt[ind]];
+                curr[w] = max(take,notTake);
+            }
+            prev = curr;
+        }
+        
+        return prev[capacity];
+    }
+};
+
+
+1array
+
+class Solution {
+  public:    
+    int knapSack(vector<int>& val, vector<int>& wt, int capacity) {
+        int n=val.size();
+        vector<int> prev(capacity+1,0);
+        //base case
+        for(int w=0;w<=capacity;w++){
+            prev[w] = ((int)(w/wt[0]) * val[0]);
+        }
+        
+        for(int ind=1;ind<n;ind++){
+            for(int w=0;w<=capacity;w++){
+                int notTake = 0 + prev[w];
+                int take = 0;
+                if(wt[ind]<=w) take = val[ind] + prev[w-wt[ind]];
+                prev[w] = max(take,notTake);
+            }
+        }
+        
+        return prev[capacity];
+    }
+};
